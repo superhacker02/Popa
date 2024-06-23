@@ -18,7 +18,7 @@ class GameSprite(sprite.Sprite):
         self.image = transform.scale(image.load(player_image), (size_x, size_y)) 
         self.speed = player_speed 
         self.rect = self.image.get_rect() 
-        self.rect.x = player_x 
+        self.rect.x = player_x
         self.rect.y = player_y 
  
     def reset(self): 
@@ -32,7 +32,7 @@ class Player(GameSprite):
         if keys[K_DOWN] and self.rect.y < win_width - 70: 
             self.rect.y += self.speed 
 
-    def update_r(self): 
+    def update_l(self): 
         keys = key.get_pressed() 
         if keys[K_w] and self.rect.y > 5: 
             self.rect.y -= self.speed 
@@ -42,6 +42,10 @@ class Player(GameSprite):
 racket_l = Player('racket.png', 10, 150, 40, 100, 30)
 racket_r = Player('racket.png', 660, 180, 40, 100, 30)
 ball = Player('ball.png', 330, 200, 40, 40, 50)
+
+font1 = font.Font(None, 40)
+lose1 = font1.render('PLAYER 1 LOSE', True, (180, 0, 0))
+lose2 = font1.render('PLAYER 2 LOSE', True, (180, 0, 0))
 
 speed_x = 3
 speed_y = 3
@@ -58,7 +62,7 @@ while game:
         ball.rect.x += speed_x
         ball.rect.y += speed_y
 
-        if sprite.collide_rect(racket, ball) or sprite.collide_rect(racket_r, ball):
+        if sprite.collide_rect(racket_l, ball) or sprite.collide_rect(racket_r, ball):
             speed_x *= -1
             speed_y *= 1
 
@@ -67,9 +71,11 @@ while game:
 
         if ball.rect.x < 0:
             finish = True
+            mw.blit(lose1, (200, 200))
 
         if ball.rect.x > win_width:
             finish = True
+            mw.blit(lose2, (200, 200))
 
         racket_l.reset()
         racket_r.reset()
